@@ -184,6 +184,16 @@ class Main extends React.Component {
         return false;
     }
 
+    onChange = (event) => {
+        var string = event.target.value;
+        if (string.length === 81) {
+            var puzzleCopy = this.getPuzzleFromString(string);
+            this.setState({
+                puzzle: puzzleCopy
+            })
+        }
+    }
+
     render() {
         // TODO validate the string is valid format (length and the characters it contains)
         return (
@@ -211,19 +221,22 @@ class Main extends React.Component {
                     </tbody>
                 </table>
                 <div className="settings">
-                    // TODO allow user to input their own puzzle
-                    <input className="puzzle-input"
-                           type="text"
-                           value={""}
-                           onChange=""
-                    />
-
                     <button onClick={() => this.solve(this.state.puzzle)}>Solve</button>
                     <button onClick={() => this.clear()}>Clear</button>
                     <br/>
                     {this.checkBoard(this.state.puzzle) && this.state.puzzle.indexOf(0) ? "solved" : "not solved"}
                     <br/>
-                    Current board: {this.state.puzzle.join("").replace(/0/g, ".")}
+                    Enter your own board
+                    <br/>
+                    {/*TODO allow user to input their own puzzle */}
+                    <input className="puzzle-input"
+                           type="text"
+                           onChange={this.onChange.bind(this)}
+                    />
+                    <br/>
+                    Current board
+                    <br/>
+                    <textarea value={this.state.puzzle.join("").replace(/0/g, ".")} rows="1" cols="85"/>
                 </div>
             </div>
         );
