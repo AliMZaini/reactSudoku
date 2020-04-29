@@ -2,44 +2,6 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 
-class Puzzle {
-    constructor(puzzle_string) {
-        this.puzzle = this.getPuzzleFromString(puzzle_string);
-    }
-
-    getPuzzleFromString = (str) => {
-        let puzzle_str_arr = str.split("");
-        puzzle_str_arr.forEach((sqr_value, index) => {
-            var value;
-            sqr_value === "." ? value = 0 : value = parseInt(sqr_value);
-            puzzle_str_arr[index] = value;
-        });
-        return puzzle_str_arr;
-    }
-
-    getPuzzle = () => {
-        return this.puzzle;
-    }
-
-    getRow = (row_index) => {
-        return this.puzzle.slice(row_index * 9, (row_index + 1) * 9);
-    }
-
-    getRows = () => {
-        var allRows = [];
-        for (var i = 0; i < Math.sqrt(this.puzzle.length); i++) {
-            allRows.push(this.getRow(i));
-        }
-        return allRows;
-    }
-
-    changeCell = (newValue, index) => {
-        console.log(newValue, index);
-        this.puzzle[index] = newValue;
-    }
-
-}
-
 class Cell extends React.Component {
     constructor() {
         super();
@@ -97,12 +59,22 @@ class Main extends React.Component {
     }
 
     changeCell = (newValue, index) => {
-        console.log(newValue, index);
         var puzzleCopy = this.state.puzzle.slice();
         puzzleCopy[index] = this.cellParser(newValue);
         this.setState({
             puzzle: puzzleCopy
         })
+    }
+
+    clear = () => {
+        var puzzleCopy = this.state.puzzle.slice();
+        puzzleCopy.forEach((value, index) => {
+            puzzleCopy[index] = 0;
+        });
+        this.setState({
+            puzzle: puzzleCopy
+        })
+        console.log(this.state.puzzle);
     }
 
     // THESE METHODS NEED TO BE MOVED
@@ -191,6 +163,10 @@ class Main extends React.Component {
         return true;
     }
 
+    checkCompleteBoard(){
+        return this.checkBoard(this.state.puzzle) && this.state.puzzle.indexOf(0);
+    }
+
     findEmptyIndex(board) {
         for (var i = 0; i < board.length; i++) {
             if (board[i] === 0) return i;
@@ -229,11 +205,13 @@ class Main extends React.Component {
                             <tr key={row_index}>
                                 {row.map((cell_value, cell_index) => {
                                     return (
-                                        <Cell
-                                            value={cell_value}
-                                            index={row_index * 9 + cell_index}
-                                            cellChange={(a, b) => this.changeCell(a, b)}
-                                        />
+                                        <td key={row_index * 9 + cell_index}>
+                                            <Cell
+                                                value={cell_value}
+                                                index={row_index * 9 + cell_index}
+                                                cellChange={(a, b) => this.changeCell(a, b)}
+                                            />
+                                        </td>
                                     )
                                 })}
                             </tr>
@@ -242,9 +220,12 @@ class Main extends React.Component {
                     }
                     </tbody>
                 </table>
-                <button onClick={() => console.log(this.checkBoard(this.state.puzzle))}>Check</button>
+                <button onClick={() => console.log(this.checkBoard(this.state.puzzle))}>Check Validity</button>
                 <button onClick={() => this.solve(this.state.puzzle)}>Solve</button>
-
+                <button onClick={() => this.clear()}>Clear</button>
+                <button onClick={() => console.log(this.checkCompleteBoard())}>Check Complete</button>
+                <br/>
+                {this.checkBoard(this.state.puzzle) && this.state.puzzle.indexOf(0) ? "solved" : "not solved"}
             </div>
         );
     }
