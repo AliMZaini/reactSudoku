@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 
-class Puzzle{
+class Puzzle {
     constructor(puzzle_string) {
         this.puzzle = this.getPuzzleFromString(puzzle_string);
     }
@@ -27,7 +27,7 @@ class Puzzle{
 
     getRows = () => {
         var allRows = [];
-        for(var i = 0; i < Math.sqrt(this.puzzle.length); i++){
+        for (var i = 0; i < Math.sqrt(this.puzzle.length); i++) {
             allRows.push(this.getRow(i));
         }
         return allRows;
@@ -40,24 +40,24 @@ class Puzzle{
 
 }
 
-class Cell extends React.Component{
+class Cell extends React.Component {
     constructor() {
         super();
     }
 
-    onChange = (event) =>{
+    onChange = (event) => {
         this.props.cellChange(event.target.value, this.props.index)
     }
 
     render() {
         var cell_value = this.props.value;
         return (
-                <input
-                    id={this.props.index}
-                    type="text"
-                    value={cell_value === 0 ? "" : cell_value}
-                    onChange={this.onChange.bind(this)}
-                />
+            <input
+                id={this.props.index}
+                type="text"
+                value={cell_value === 0 ? "" : cell_value}
+                onChange={this.onChange.bind(this)}
+            />
         )
     }
 }
@@ -68,9 +68,6 @@ class Main extends React.Component {
         this.state = {
             puzzle: this.getPuzzleFromString(this.props.puzzle)
         };
-
-        this.changeCell = this.changeCell.bind(this);
-
     }
 
     cellParser = (value) => {
@@ -93,7 +90,7 @@ class Main extends React.Component {
 
     getRows = () => {
         var allRows = [];
-        for(var i = 0; i < Math.sqrt(this.state.puzzle.length); i++){
+        for (var i = 0; i < Math.sqrt(this.state.puzzle.length); i++) {
             allRows.push(this.getRow(i));
         }
         return allRows;
@@ -106,6 +103,118 @@ class Main extends React.Component {
         this.setState({
             puzzle: puzzleCopy
         })
+    }
+
+    // THESE METHODS NEED TO BE MOVED
+    getOccurances(array, query) {
+        return array.filter((e) => (e === query)).length;
+    }
+
+// checks there are no duplicates in an array, where duplicate nulls are allowed
+    checkNoDuplicates(array) {
+        for (var i = 0; i < array.length; i++) {
+            if (array[i] != 0 && this.getOccurances(array, array[i]) != 1) return false;
+        }
+        return true;
+    }
+
+    getRow(rowNumber, board) {
+        return board.slice(rowNumber * 9, (rowNumber * 9) + 9);
+    }
+
+    checkRow(rowNumber, board) {
+        return this.checkNoDuplicates(this.getRow(rowNumber, board));
+    }
+
+    getColumn(colNumber, board) {
+        var column = [];
+        for (var i = 0; i < 9; i++) {
+            var row = this.getRow(i, board);
+            column.push(row[colNumber]);
+        }
+        return column;
+    }
+
+    checkColumn(colNumber, board) {
+        return this.checkNoDuplicates(this.getColumn(colNumber, board));
+    }
+
+    // disgusting
+    getSubgrid(gridNumber, board) {
+        var subGrid = [];
+
+        var gridRows = [];
+
+        if ([0, 1, 2].includes(gridNumber)) {
+            gridRows.push(this.getRow(0, board));
+            gridRows.push(this.getRow(1, board));
+            gridRows.push(this.getRow(2, board));
+        }
+        if ([3, 4, 5].includes(gridNumber)) {
+            gridRows.push(this.getRow(3, board));
+            gridRows.push(this.getRow(4, board));
+            gridRows.push(this.getRow(5, board));
+        }
+        if ([6, 7, 8].includes(gridNumber)) {
+            gridRows.push(this.getRow(6, board));
+            gridRows.push(this.getRow(7, board));
+            gridRows.push(this.getRow(8, board));
+        }
+
+        if ([0, 3, 6].includes(gridNumber)) {
+            for (var i = 0; i < gridRows.length; i++) {
+                gridRows[i].slice(0, 3).forEach((e) => subGrid.push(e));
+            }
+        }
+        if ([1, 4, 7].includes(gridNumber)) {
+            for (var i = 0; i < gridRows.length; i++) {
+                gridRows[i].slice(3, 6).forEach((e) => subGrid.push(e));
+            }
+        }
+        if ([2, 5, 8].includes(gridNumber)) {
+            for (var i = 0; i < gridRows.length; i++) {
+                gridRows[i].slice(6, 9).forEach((e) => subGrid.push(e));
+            }
+        }
+        return subGrid;
+    }
+
+    checkSubgrid(gridNumber, board) {
+        return this.checkNoDuplicates(this.getSubgrid(gridNumber, board));
+    }
+
+    // returns true if the board is in a valid state
+    checkBoard(board) {
+        for (var i = 0; i < 9; i++) {
+            if (!this.checkRow(i, board) || !this.checkColumn(i, board) || !this.checkSubgrid(i, board)) return false;
+        }
+        return true;
+    }
+
+    findEmptyIndex(board) {
+        for (var i = 0; i < board.length; i++) {
+            if (board[i] === 0) return i;
+        }
+        return -1;
+    }
+
+    solve(board) {
+        var emptyIndex = this.findEmptyIndex(board);
+        if (emptyIndex === -1) return true;
+
+        for (var value = 1; value < 10; value++) {
+            if (this.checkBoard(board)) {
+                board[emptyIndex] = value;
+                if (this.solve(board) && this.checkBoard(board)) {
+                    this.setState({
+                        puzzle: board
+                    });
+                    return true;
+                }
+                board[emptyIndex] = 0;
+            }
+        }
+        return false;
     }
 
     render() {
@@ -121,17 +230,21 @@ class Main extends React.Component {
                                 {row.map((cell_value, cell_index) => {
                                     return (
                                         <Cell
-                                            value = {cell_value}
-                                            index = {row_index * 9 + cell_index}
-                                            cellChange = {(a, b) => this.changeCell(a, b)}
+                                            value={cell_value}
+                                            index={row_index * 9 + cell_index}
+                                            cellChange={(a, b) => this.changeCell(a, b)}
                                         />
                                     )
                                 })}
                             </tr>
-                        )})
+                        )
+                    })
                     }
                     </tbody>
                 </table>
+                <button onClick={() => console.log(this.checkBoard(this.state.puzzle))}>Check</button>
+                <button onClick={() => this.solve(this.state.puzzle)}>Solve</button>
+
             </div>
         );
     }
