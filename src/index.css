@@ -5,6 +5,7 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  background-color: #204051;
 }
 
 code {
@@ -13,5 +14,36 @@ code {
 }
 
 input {
-  width: 21px;
+  width: 75px;
+  height: 75px;
+  text-align: center;
+  font-size: 55px;
+  color: #b4dfe5;
+  background-color: transparent;
+  border: 1px solid rgba(180, 223, 229, 0.43);
+}
+
+table, td {
+  color: #b4dfe5;
+  background: #3b6978;
+  margin: auto;
+}
+
+table {
+  margin-top: 3%;
+  margin-bottom: 1%;
+  padding: 7px;
+  border: 10px solid #b4dfe5;
+  border-radius: 30px;
+}
+
+.settings{
+  margin: auto;
+  width: 50%;
+  text-align: center;
+  color: #b4dfe5;
+}
+
+.puzzle-input{
+  width: 100%;
 }

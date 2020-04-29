@@ -3,10 +3,6 @@ import ReactDOM from 'react-dom';
 import './index.css';
 
 class Cell extends React.Component {
-    constructor() {
-        super();
-    }
-
     onChange = (event) => {
         this.props.cellChange(event.target.value, this.props.index)
     }
@@ -74,7 +70,6 @@ class Main extends React.Component {
         this.setState({
             puzzle: puzzleCopy
         })
-        console.log(this.state.puzzle);
     }
 
     // THESE METHODS NEED TO BE MOVED
@@ -82,10 +77,10 @@ class Main extends React.Component {
         return array.filter((e) => (e === query)).length;
     }
 
-// checks there are no duplicates in an array, where duplicate nulls are allowed
+    // checks there are no duplicates in an array, where duplicate nulls are allowed
     checkNoDuplicates(array) {
         for (var i = 0; i < array.length; i++) {
-            if (array[i] != 0 && this.getOccurances(array, array[i]) != 1) return false;
+            if (array[i] !== 0 && this.getOccurances(array, array[i]) !== 1) return false;
         }
         return true;
     }
@@ -134,17 +129,17 @@ class Main extends React.Component {
         }
 
         if ([0, 3, 6].includes(gridNumber)) {
-            for (var i = 0; i < gridRows.length; i++) {
+            for (let i = 0; i < gridRows.length; i++) {
                 gridRows[i].slice(0, 3).forEach((e) => subGrid.push(e));
             }
         }
         if ([1, 4, 7].includes(gridNumber)) {
-            for (var i = 0; i < gridRows.length; i++) {
+            for (let i = 0; i < gridRows.length; i++) {
                 gridRows[i].slice(3, 6).forEach((e) => subGrid.push(e));
             }
         }
         if ([2, 5, 8].includes(gridNumber)) {
-            for (var i = 0; i < gridRows.length; i++) {
+            for (let i = 0; i < gridRows.length; i++) {
                 gridRows[i].slice(6, 9).forEach((e) => subGrid.push(e));
             }
         }
@@ -161,10 +156,6 @@ class Main extends React.Component {
             if (!this.checkRow(i, board) || !this.checkColumn(i, board) || !this.checkSubgrid(i, board)) return false;
         }
         return true;
-    }
-
-    checkCompleteBoard(){
-        return this.checkBoard(this.state.puzzle) && this.state.puzzle.indexOf(0);
     }
 
     findEmptyIndex(board) {
@@ -195,7 +186,6 @@ class Main extends React.Component {
 
     render() {
         // TODO validate the string is valid format (length and the characters it contains)
-
         return (
             <div>
                 <table>
@@ -220,12 +210,21 @@ class Main extends React.Component {
                     }
                     </tbody>
                 </table>
-                <button onClick={() => console.log(this.checkBoard(this.state.puzzle))}>Check Validity</button>
-                <button onClick={() => this.solve(this.state.puzzle)}>Solve</button>
-                <button onClick={() => this.clear()}>Clear</button>
-                <button onClick={() => console.log(this.checkCompleteBoard())}>Check Complete</button>
-                <br/>
-                {this.checkBoard(this.state.puzzle) && this.state.puzzle.indexOf(0) ? "solved" : "not solved"}
+                <div className="settings">
+                    // TODO allow user to input their own puzzle
+                    <input className="puzzle-input"
+                           type="text"
+                           value={""}
+                           onChange=""
+                    />
+
+                    <button onClick={() => this.solve(this.state.puzzle)}>Solve</button>
+                    <button onClick={() => this.clear()}>Clear</button>
+                    <br/>
+                    {this.checkBoard(this.state.puzzle) && this.state.puzzle.indexOf(0) ? "solved" : "not solved"}
+                    <br/>
+                    Current board: {this.state.puzzle.join("").replace(/0/g, ".")}
+                </div>
             </div>
         );
     }
