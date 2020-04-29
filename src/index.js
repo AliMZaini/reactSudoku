@@ -184,19 +184,27 @@ class Main extends React.Component {
         return false;
     }
 
-    onChange = (event) => {
-        var string = event.target.value;
-        if (string.length === 81) {
-            var puzzleCopy = this.getPuzzleFromString(string);
-            this.setState({
-                puzzle: puzzleCopy
-            })
+    onKeyPress = (event) => {
+        if (event.key === "Enter") {
+            var string = event.target.value;
+            if (string.length === 81) {
+                var puzzleCopy = this.getPuzzleFromString(string);
+                this.setState({
+                    puzzle: puzzleCopy
+                })
+            }
         }
     }
 
     render() {
+        let solved = this.checkBoard(this.state.puzzle) && this.state.puzzle.indexOf(0) === -1;
+        var solved_style = {
+            color: solved ? "green" : "red"
+        };
         return (
             <div>
+                <h1>reactSudoku</h1>
+
                 <table>
                     <tbody>
                     {this.getRows().map((row, row_index) => {
@@ -219,30 +227,42 @@ class Main extends React.Component {
                     }
                     </tbody>
                 </table>
+
                 <div className="settings">
-                    {this.checkBoard(this.state.puzzle) && this.state.puzzle.indexOf(0) ? "SOLVE" : "NOT SOLVED"}
+                    <h2 style={solved_style}>
+                        {solved ? "SOLVED" : "NOT SOLVED"}
+                    </h2>
+
                     <br/>
+
                     <button onClick={() => this.solve(this.state.puzzle)}>Solve</button>
                     <button onClick={() => this.clear()}>Clear</button>
+
                     <br/>
-                    Enter Your Own Board
-                    <br/>
-                    <input className="puzzle-input"
-                           type="text"
-                           placeholder="Enter puzzle here..."
-                           onChange={this.onChange.bind(this)}
+
+                    <textarea className="board-showcase"
+                              type="input"
+                              placeholder="Enter puzzle here..."
+                              onKeyPress={this.onKeyPress.bind(this)}
                     />
+
                     <br/>
                     Current Board
                     <br/>
-                    <textarea value={this.state.puzzle.join("").replace(/0/g, ".")} rows="1" cols="85"/>
+
+                    <textarea className="board-showcase" value={this.state.puzzle.join("").replace(/0/g, ".")}/>
                 </div>
             </div>
         );
     }
 }
 
+// TODO have more puzzles to return
+let getRandomPuzzle = () => {
+    return "...26.7.168..7..9.19...45..82.1...4...46.29...5...3.28..93...74.4..5..367.3.18...";
+}
+
 ReactDOM.render(
-    <Main puzzle="...26.7.168..7..9.19...45..82.1...4...46.29...5...3.28..93...74.4..5..367.3.18..."/>,
+    <Main puzzle={getRandomPuzzle()}/>,
     document.getElementById('root')
 );

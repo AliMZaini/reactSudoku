@@ -1,65 +1,103 @@
 body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
     sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  background-color: #204051;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    background-color: #204051;
 }
 
 code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
 
 input {
-  width: 60px;
-  height: 60px;
-  text-align: center;
-  font-size: 55px;
-  color: #b4dfe5;
-  background-color: transparent;
-  border: 1px solid rgba(180, 223, 229, 0.2);
+    width: 60px;
+    height: 60px;
+    text-align: center;
+    font-size: 55px;
+    color: #b4dfe5;
+    background-color: transparent;
+    border: 1px solid rgba(180, 223, 229, 0.2);
+    border-radius: 15px;
 }
 
 table, td {
-  color: #b4dfe5;
-  background: #3b6978;
-  margin: auto;
+    color: #b4dfe5;
+    background: #3b6978;
+    margin: auto;
 }
 
 table {
-  margin-top: 3%;
-  margin-bottom: 1%;
-  padding: 7px;
-  border: 10px solid #b4dfe5;
-  border-radius: 30px;
+    margin-bottom: 1%;
+    padding: 7px;
+    border: 10px solid #b4dfe5;
+    border-radius: 30px;
 }
 
-button{
-  display: inline-block;
-  font-weight: 400;
-  text-align: center;
-  white-space: nowrap;
-  vertical-align: middle;
-  border: 1px solid transparent;
-  padding: 6px 12px;
-  font-size: 14px;
-  line-height: 1.6;
-  border-radius: 4px;
-  margin: 5px;
+button {
+    display: inline-block;
+    font-weight: 400;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle;
+    border: 1px solid #b4dfe5;
+    padding: 6px 12px;
+    font-size: 14px;
+    line-height: 1.6;
+    border-radius: 4px;
+    margin: 0px 5px 5px;
+    background-color: #3b6978;
+    color: #b4dfe5;
 }
 
-.settings{
-  margin: auto;
-  width: 50%;
-  text-align: center;
-  color: #b4dfe5;
+button:hover {
+    background-color: rgba(180, 223, 229, 0.1);
 }
 
-.puzzle-input{
-  width: 100%;
-  height: 100%;
-  font-size: 130%;
+h1, h2 {
+    margin: auto;
+    width: 50%;
+    text-align: center;
+    color: #b4dfe5;
+}
+
+h1 {
+    margin-top: 1%;
+    margin-bottom: 1%;
+}
+
+.settings {
+    margin: auto;
+    width: 50%;
+    text-align: center;
+    color: #b4dfe5;
+}
+
+.board-showcase {
+    text-align: center;
+    color: #b4dfe5;
+    background-color: rgba(180, 223, 229, 0.1);
+    border: 1px solid rgba(180, 223, 229, 0.2);
+    border-radius: 15px;
+    height: 2em;
+    width: 50em;
+}
+
+td:nth-of-type(3n) {
+    border-right: 3px solid #b4dfe5;
+}
+
+tr:nth-of-type(3n) td {
+    border-bottom: 3px solid #b4dfe5;
+}
+
+td:nth-of-type(9n) {
+    border-right: 3px solid #3b6978;
+}
+
+tr:nth-of-type(9n) td {
+    border-bottom: 3px solid #3b6978;
 }

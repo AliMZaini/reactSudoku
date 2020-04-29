@@ -7,7 +7,7 @@ This time you can actually solve the puzzle yourself, import/export the board or
 
 # Things to add
 
-* Custom board sizes
+* Custom board sizes/difficulty
 
 * Randomly generate/load puzzles
 
