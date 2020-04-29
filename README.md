@@ -5,6 +5,8 @@ This is an iteration on my previous implementation of sudoku in JS, which you ca
 
 This time you can actually solve the puzzle yourself, import/export the board or have it automatically solved.
 
+You can try it here: http://zaini.me/reactSudoku/
+
 # Things to add
 
 * Custom board sizes/difficulty
