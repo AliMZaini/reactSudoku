@@ -195,7 +195,6 @@ class Main extends React.Component {
     }
 
     render() {
-        // TODO validate the string is valid format (length and the characters it contains)
         return (
             <div>
                 <table>
@@ -221,20 +220,20 @@ class Main extends React.Component {
                     </tbody>
                 </table>
                 <div className="settings">
+                    {this.checkBoard(this.state.puzzle) && this.state.puzzle.indexOf(0) ? "SOLVE" : "NOT SOLVED"}
+                    <br/>
                     <button onClick={() => this.solve(this.state.puzzle)}>Solve</button>
                     <button onClick={() => this.clear()}>Clear</button>
                     <br/>
-                    {this.checkBoard(this.state.puzzle) && this.state.puzzle.indexOf(0) ? "solved" : "not solved"}
+                    Enter Your Own Board
                     <br/>
-                    Enter your own board
-                    <br/>
-                    {/*TODO allow user to input their own puzzle */}
                     <input className="puzzle-input"
                            type="text"
+                           placeholder="Enter puzzle here..."
                            onChange={this.onChange.bind(this)}
                     />
                     <br/>
-                    Current board
+                    Current Board
                     <br/>
                     <textarea value={this.state.puzzle.join("").replace(/0/g, ".")} rows="1" cols="85"/>
                 </div>
