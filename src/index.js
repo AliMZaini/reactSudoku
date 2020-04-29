@@ -55,7 +55,7 @@ class Cell extends React.Component{
                 <input
                     id={this.props.index}
                     type="text"
-                    value={cell_value === 0 ? " " : cell_value}
+                    value={cell_value === 0 ? "" : cell_value}
                     onChange={this.onChange.bind(this)}
                 />
         )
@@ -73,11 +73,15 @@ class Main extends React.Component {
 
     }
 
+    cellParser = (value) => {
+        return isNaN(parseInt(value)) ? 0 : (0 < parseInt(value) && parseInt(value) < 10 ? parseInt(value) : 0);
+    }
+
     getPuzzleFromString = (str) => {
         let puzzle_str_arr = str.split("");
         puzzle_str_arr.forEach((sqr_value, index) => {
             var value;
-            sqr_value === "." ? value = 0 : value = parseInt(sqr_value);
+            sqr_value === "." ? value = 0 : value = this.cellParser(sqr_value);
             puzzle_str_arr[index] = value;
         });
         return puzzle_str_arr;
@@ -97,8 +101,8 @@ class Main extends React.Component {
 
     changeCell = (newValue, index) => {
         console.log(newValue, index);
-        var puzzleCopy = this.state.puzzle.split();
-        puzzleCopy[index] = newValue;
+        var puzzleCopy = this.state.puzzle.slice();
+        puzzleCopy[index] = this.cellParser(newValue);
         this.setState({
             puzzle: puzzleCopy
         })
@@ -106,17 +110,15 @@ class Main extends React.Component {
 
     render() {
         // TODO validate the string is valid format (length and the characters it contains)
-        console.log(this.state.puzzle);
-        console.log(this.getRow(8));
 
         return (
             <div>
                 <table>
                     <tbody>
-                    {this.getRows().map(function(row, row_index) {
+                    {this.getRows().map((row, row_index) => {
                         return (
                             <tr key={row_index}>
-                                {row.map(function (cell_value, cell_index) {
+                                {row.map((cell_value, cell_index) => {
                                     return (
                                         <Cell
                                             value = {cell_value}
