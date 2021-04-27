@@ -1,11 +1,11 @@
 # reactSudoku
 Sudoku in React
 
-This is an iteration on my previous implementation of sudoku in JS, which you can see [here](https://github.com/AliMZaini/jsudoku).
+This is an iteration on my previous implementation of sudoku in JS, which you can see [here](https://github.com/zaini/jsudoku).
 
 This time you can actually solve the puzzle yourself, import/export the board or have it automatically solved.
 
-You can try it here: http://zaini.me/reactSudoku/
+You can try it here: https://old.zaini.me/reactSudoku/
 
 # Things to add
 
